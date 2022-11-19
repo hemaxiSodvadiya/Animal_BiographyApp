@@ -31,6 +31,7 @@ class CustomAppBar extends StatelessWidget {
                 ],
               ),
             ),
+            /**/
             Spacer(),
             Icon(
               Icons.menu,
