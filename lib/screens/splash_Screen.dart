@@ -1,10 +1,13 @@
+
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../common/custom_app_bar.dart';
-import '../style/strings.dart';
-import '../style/text_styles.dart';
-import 'choose_plan_screen.dart';
+import '../global/global_data.dart';
+import '../helper/db_helpers.dart';
+import '../model/model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,59 +17,80 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Future splashImage() async {
-    String uri = "https://source.unsplash.com/random/700×900/?wildAnimal";
-    http.Response response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      return response.bodyBytes;
-    }
-    return null;
-  }
-
-  int live = 0;
+  int index = 0;
+  Random random = Random();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    splashImage();
+    Future<List<DBData>> details = DBHelper.dbHelper
+        .fetchAllRecord(tableName: "Splash", data: Global.detailsOfData);
   }
 
   @override
   Widget build(BuildContext context) {
-    double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    TextStyle titleStyle = TextStyle(
+      fontSize: 40,
+      color: Colors.white.withOpacity(0.8),
+      fontWeight: FontWeight.w600,
+    );
+    TextStyle titleStyle2 = TextStyle(
+      fontSize: 28,
+      color: Colors.white.withOpacity(0.8),
+      fontWeight: FontWeight.w600,
+    );
 
+    TextStyle textStyle = TextStyle(
+      fontSize: 18,
+      color: Colors.white.withOpacity(0.8),
+      fontWeight: FontWeight.w600,
+    );
     return Scaffold(
-      body: IndexedStack(
-        index: live,
+      backgroundColor: Colors.brown.shade100,
+      body: SafeArea(
+          child: IndexedStack(
+        index: index,
         children: [
-          // Splash Screen 1
           Stack(
             children: [
               FutureBuilder(
-                future: splashImage(),
-                builder: (context, snapShot) {
-                  if (snapShot.hasData) {
-                    return Image.memory(
-                      snapShot.data,
-                      height: _height,
-                      width: _width,
-                      fit: BoxFit.cover,
-                      colorBlendMode: BlendMode.modulate,
-                      color: const Color(0xffC19E82),
+                future: DBHelper.dbHelper.fetchAllRecord(
+                    tableName: "ManEater", data: Global.detailsOfData),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List? res = snapshot.data as List?;
+                    int? randomIndex = random.nextInt(res!.length);
+                    DBData randomImage = res[randomIndex];
+
+                    return Container(
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                          color: const Color(0xffC19E82),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              opacity: 0.4,
+                              image: MemoryImage(
+                                randomImage.image,
+                              ))),
                     );
-                  } else if (snapShot.hasError) {
+                  } else if (snapshot.hasError) {
                     return Center(
-                      child: Text("${snapShot.error}"),
+                      child: Text("${snapshot.error}"),
                     );
                   } else {
-                    return CircularProgressIndicator();
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.brown,
+                      ),
+                    );
                   }
                 },
               ),
               Column(
-                children: <Widget>[
+                children: [
                   CustomAppBar(),
                   Spacer(),
                   Padding(
@@ -79,19 +103,31 @@ class _SplashScreenState extends State<SplashScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: Strings.READY_TO_WATCH,
-                            style: TextStyles.bigHeadingTextStyle,
+                            text: "Ready to watch?",
+                            style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
                           ),
                           TextSpan(text: "\n"),
                           TextSpan(
-                            text: Strings.READY_TO_WATCH_DESC,
-                            style: TextStyles.bodyTextStyle,
-                          ),
+                              text:
+                                  "A planet is a global leader in real life entertainment, serving a passionate audience of superfans around the world with content that inspires, informs and entertains.",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              )),
                           TextSpan(text: "\n"),
                           TextSpan(text: "\n"),
                           TextSpan(
-                            text: Strings.START_ENJOYING,
-                            style: TextStyles.buttonTextStyle,
+                            text: "Start Enjoying",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
@@ -99,39 +135,40 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ],
               ),
-              Positioned(
-                bottom: -30,
-                right: -30,
+              Align(
+                alignment: Alignment.bottomRight,
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ChoosePlanScreen(),
-                      ),
-                    );
+                    setState(() {
+                      Navigator.of(context).pushNamed('choose_Page');
+                    });
                   },
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFFDAD4CC).withOpacity(0.8),
-                    ),
-                    child: Align(
-                      alignment: Alignment(-0.4, -0.4),
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  ),
+                  child: NextPage(),
                 ),
-              ),
+              )
             ],
           ),
-          // Splash Screen 2
         ],
+      )),
+    );
+  }
+
+  NextPage() {
+    return Container(
+      alignment: Alignment.bottomRight,
+      height: 70,
+      width: 80,
+      padding: const EdgeInsets.only(right: 20, bottom: 15),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(100),
+        ),
+      ),
+      child: const Icon(
+        Icons.arrow_forward,
+        size: 30,
+        color: Colors.white,
       ),
     );
   }
