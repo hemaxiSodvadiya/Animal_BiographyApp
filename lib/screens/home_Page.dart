@@ -1,13 +1,251 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+// import 'dart:typed_data';
+// import '../common/custom_app_bar.dart';
+// import '../common/options_container.dart';
+// import '../global/global_data.dart';
+// import '../helper/db_helpers.dart';
+// import '../helper/splash_api.dart';
+// import '../model/model.dart';
+// import '../style/strings.dart';
+// import '../style/text_styles.dart';
+//
+// class HomePage extends StatefulWidget {
+//   const HomePage({Key? key}) : super(key: key);
+//
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+//
+// class _HomePageState extends State<HomePage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final width = MediaQuery.of(context).size.width;
+//     final height = MediaQuery.of(context).size.height;
+//
+//     return Scaffold(
+//       backgroundColor: Color(0xFFB98959).withOpacity(0.6),
+//       body: Stack(
+//         children: [
+//           Container(
+//             height: height * 0.46,
+//             child: Stack(
+//               children: [
+//                 FutureBuilder(
+//                   future: SplashHelper.splashHelper.splashImage(),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.hasData) {
+//                       Uint8List? image = snapshot.data;
+//                       return Image.memory(
+//                         height: height * 0.50,
+//                         width: double.infinity,
+//                         image!,
+//                         fit: BoxFit.cover,
+//                         color: Colors.teal.withOpacity(0.8),
+//                         colorBlendMode: BlendMode.modulate,
+//                       );
+//                     } else if (snapshot.hasError) {
+//                       return Center(child: Text("${snapshot.error}"));
+//                     } else {
+//                       return CircularProgressIndicator();
+//                     }
+//                   },
+//                 ),
+//                 Column(
+//                   children: <Widget>[
+//                     CustomAppBar(
+//                       opacity: 1,
+//                     ),
+//                     Expanded(
+//                       child: Align(
+//                         alignment: Alignment(0, -0.6),
+//                         child: Text(
+//                           Strings.welcomeToAPlanet,
+//                           style: TextStyles.bigHeadingTextStyle,
+//                           textAlign: TextAlign.center,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//           Align(
+//             alignment: Alignment.bottomCenter,
+//             child: Container(
+//               height: height * 0.63,
+//               width: double.infinity,
+//               padding: const EdgeInsets.all(20),
+//               decoration: BoxDecoration(
+//                 color: Color(0xFFB98959),
+//                 borderRadius: const BorderRadius.only(
+//                   topRight: Radius.circular(30),
+//                   topLeft: Radius.circular(30),
+//                 ),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   FutureBuilder(
+//                     future: DbHelper.dbHelper
+//                         .fetchAllRespons(data: Global.wildAnimalSplashData),
+//                     builder: (context, snapShot) {
+//                       if (snapShot.hasData) {
+//                         List<WildAnimal>? res = snapShot.data;
+//
+//                         print("+++++++");
+//                         return InkWell(
+//                           onTap: () {
+//                             setState(() {
+//                               Navigator.of(context)
+//                                   .pushNamed('page', arguments: Global.images);
+//                             });
+//                           },
+//                           child: SizedBox(
+//                             height: height * 0.39,
+//                             child: ListView.builder(
+//                               scrollDirection: Axis.horizontal,
+//                               itemCount: Global.images.length,
+//                               itemBuilder: (context, i) {
+//                                 return Padding(
+//                                   padding: const EdgeInsets.only(
+//                                     top: 10,
+//                                     bottom: 10,
+//                                     right: 15,
+//                                   ),
+//                                   child: Column(
+//                                     crossAxisAlignment:
+//                                         CrossAxisAlignment.start,
+//                                     children: [
+//                                       Container(
+//                                         height: height * 0.26,
+//                                         width: width * 0.5,
+//                                         decoration: BoxDecoration(
+//                                           borderRadius:
+//                                               BorderRadius.circular(7),
+//                                           boxShadow: [
+//                                             BoxShadow(
+//                                               color:
+//                                                   Colors.black.withOpacity(0.2),
+//                                               blurRadius: 3,
+//                                             )
+//                                           ],
+//                                           image: DecorationImage(
+//                                             fit: BoxFit.cover,
+//                                             image: AssetImage(
+//                                                 "${Global.images[i].image}"),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                       Padding(
+//                                         padding: const EdgeInsets.symmetric(
+//                                             vertical: 2),
+//                                         child: Text(
+//                                           Strings.lifeWithATiger,
+//                                           style: TextStyles.titleTextStyle,
+//                                         ),
+//                                       ),
+//                                       Padding(
+//                                         padding: const EdgeInsets.symmetric(
+//                                             vertical: 2),
+//                                         child: Text(
+//                                           Strings.loremIpsum,
+//                                           style: TextStyles.body3TextStyle,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ),
+//                         );
+//                       } else if (snapShot.hasError) {
+//                         return Center(child: Text("${snapShot.error}"));
+//                       } else {
+//                         return Container(
+//                           color: Colors.red,
+//                         );
+//                       }
+//                     },
+//                   ),
+//                   Text(
+//                     Strings.quickCategories,
+//                     style: TextStyles.titleTextStyle,
+//                   ),
+//                   const SizedBox(height: 7),
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       GestureDetector(
+//                         onTap: () async {
+//                           Global.category = "Elephant";
+//                           setState(() {});
+//                         },
+//                         child: clickOptions(
+//                           name: "Elephant",
+//                           image: "elephant",
+//                           height: height,
+//                           width: width,
+//                         ),
+//                       ),
+//                       GestureDetector(
+//                         onTap: () {
+//                           Global.category = "Lion";
+//                           setState(() {});
+//                         },
+//                         child: clickOptions(
+//                           name: "Lion",
+//                           image: "lion",
+//                           height: height,
+//                           width: width,
+//                         ),
+//                       ),
+//                       GestureDetector(
+//                         onTap: () {
+//                           Global.category = "Snake";
+//                           setState(() {});
+//                         },
+//                         child: clickOptions(
+//                           name: "Snake",
+//                           image: "snake",
+//                           height: height,
+//                           width: width,
+//                         ),
+//                       ),
+//                       GestureDetector(
+//                         onTap: () {
+//                           Global.category = "Pets";
+//                           setState(() {});
+//                         },
+//                         child: clickOptions(
+//                           name: "Pets",
+//                           image: "pets",
+//                           height: height,
+//                           width: width,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
+
 import '../common/custom_app_bar.dart';
 import '../common/options_container.dart';
 import '../global/global_data.dart';
 import '../helper/db_helpers.dart';
 import '../helper/splash_api.dart';
 import '../model/model.dart';
-import '../style/strings.dart';
-import '../style/text_styles.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,67 +255,78 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Color backGroundColor = const Color(0xffC19E82);
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-      backgroundColor: Color(0xFFB98959).withOpacity(0.6),
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return SafeArea(
+        child: Scaffold(
       body: Stack(
         children: [
           Container(
-            height: height * 0.46,
+            color: backGroundColor,
+            height: height * 0.35,
             child: Stack(
               children: [
                 FutureBuilder(
-                  future: SplashHelper.splashHelper.splashImage(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       Uint8List? image = snapshot.data;
                       return Image.memory(
-                        height: height * 0.50,
+                        height: height * 0.35,
                         width: double.infinity,
                         image!,
                         fit: BoxFit.cover,
-                        color: Colors.teal.withOpacity(0.8),
+                        color: backGroundColor.withOpacity(0.8),
                         colorBlendMode: BlendMode.modulate,
                       );
                     } else if (snapshot.hasError) {
                       return Center(child: Text("${snapshot.error}"));
                     } else {
-                      return CircularProgressIndicator();
+                      return Center(
+                        child: const CircularProgressIndicator(
+                          color: Colors.brown,
+                        ),
+                      );
                     }
                   },
+                  future: ImageApi.imageApi.getImage(search: 'Wild Animal'),
                 ),
-                Column(
-                  children: <Widget>[
-                    CustomAppBar(
-                      opacity: 1,
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0, -0.6),
-                        child: Text(
-                          Strings.welcomeToAPlanet,
-                          style: TextStyles.bigHeadingTextStyle,
-                          textAlign: TextAlign.center,
+                CustomAppBar(),
+                Container(
+                  height: height * 0.38,
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        "Welcome to\nNew Aplanet",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 43,
+                          color: Colors.white.withOpacity(0.86),
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      const Spacer(),
+                      SizedBox(height: height * 0.015),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: height * 0.63,
+              // alignment: Alignment.bottomCenter,
+              height: height * 0.65,
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color(0xFFB98959),
+                color: backGroundColor,
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(30),
                   topLeft: Radius.circular(30),
@@ -86,19 +335,14 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Spacer(),
                   FutureBuilder(
-                    future: DbHelper.dbHelper
-                        .fetchAllRespons(data: Global.wildAnimalSplashData),
-                    builder: (context, snapShot) {
-                      if (snapShot.hasData) {
-                        List<WildAnimal>? res = snapShot.data;
-
-                        print("+++++++");
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<DBAnimal> data = snapshot.data!;
                         return SizedBox(
-                          height: height * 0.39,
+                          height: height * 0.38,
                           child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: Global.images.length,
                             itemBuilder: (context, i) {
                               return Padding(
                                 padding: const EdgeInsets.only(
@@ -106,77 +350,117 @@ class _HomePageState extends State<HomePage> {
                                   bottom: 10,
                                   right: 15,
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: height * 0.26,
-                                      width: width * 0.5,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(7),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.2),
-                                            blurRadius: 3,
-                                          )
-                                        ],
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                              "${Global.images[i].image}"),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        'detail_Page',
+                                        arguments: data[i]);
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: height * 0.26,
+                                        width: width * 0.5,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                                blurRadius: 3,
+                                              )
+                                            ],
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: MemoryImage(
+                                                    data[i].image))),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        data[i].name,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2),
-                                      child: Text(
-                                        Strings.lifeWithATiger,
-                                        style: TextStyles.titleTextStyle,
+                                      Text(
+                                        data[i].description,
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.8),
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2),
-                                      child: Text(
-                                        Strings.loremIpsum,
-                                        style: TextStyles.body3TextStyle,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             },
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data.length,
                           ),
                         );
-                      } else if (snapShot.hasError) {
-                        return Center(child: Text("${snapShot.error}"));
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text("${snapshot.error}"));
                       } else {
-                        return Container(
-                          color: Colors.red,
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.brown,
+                          ),
                         );
                       }
                     },
+                    future: DBHelper.dbHelper.fetchAllAnimalData(
+                        tableName: "animalsData", data: Global.animalData),
                   ),
+                  const Spacer(),
                   Text(
-                    Strings.quickCategories,
-                    style: TextStyles.titleTextStyle,
+                    "Quick Categories",
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: Colors.white.withOpacity(0.9),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  const SizedBox(height: 7),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () async {
+                        onTap: () {
+                          Global.category = "Snake";
                           setState(() {});
                         },
                         child: clickOptions(
-                          name: "Elephant",
-                          image: "elephant",
-                          height: height,
-                          width: width,
-                        ),
+                            width: width,
+                            height: height,
+                            name: "Snake",
+                            image: "snake"),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Global.category = "Dog";
+                          setState(() {});
+                        },
+                        child: clickOptions(
+                            width: width,
+                            height: height,
+                            name: "Dog",
+                            image: "dog"),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Global.category = "Elephant";
+                          setState(() {});
+                        },
+                        child: clickOptions(
+                            width: width,
+                            height: height,
+                            name: "Elephant",
+                            image: "elephant"),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -184,35 +468,10 @@ class _HomePageState extends State<HomePage> {
                           setState(() {});
                         },
                         child: clickOptions(
-                          name: "Lion",
-                          image: "lion",
-                          height: height,
-                          width: width,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Global.category = "Snake";
-                          setState(() {});
-                        },
-                        child: clickOptions(
-                          name: "Snake",
-                          image: "snake",
-                          height: height,
-                          width: width,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Global.category = "Pets";
-                          setState(() {});
-                        },
-                        child: clickOptions(
-                          name: "Pets",
-                          image: "pets",
-                          height: height,
-                          width: width,
-                        ),
+                            width: width,
+                            height: height,
+                            name: "Lion",
+                            image: "lion"),
                       ),
                     ],
                   ),
@@ -222,6 +481,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
