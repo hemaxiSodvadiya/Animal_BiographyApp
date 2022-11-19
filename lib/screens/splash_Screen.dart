@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -31,22 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    TextStyle titleStyle = TextStyle(
-      fontSize: 40,
-      color: Colors.white.withOpacity(0.8),
-      fontWeight: FontWeight.w600,
-    );
-    TextStyle titleStyle2 = TextStyle(
-      fontSize: 28,
-      color: Colors.white.withOpacity(0.8),
-      fontWeight: FontWeight.w600,
-    );
-
-    TextStyle textStyle = TextStyle(
-      fontSize: 18,
-      color: Colors.white.withOpacity(0.8),
-      fontWeight: FontWeight.w600,
-    );
+ 
     return Scaffold(
       backgroundColor: Colors.brown.shade100,
       body: SafeArea(
@@ -156,8 +139,8 @@ class _SplashScreenState extends State<SplashScreen> {
   NextPage() {
     return Container(
       alignment: Alignment.bottomRight,
-      height: 70,
-      width: 80,
+      height: 75,
+      width: 85,
       padding: const EdgeInsets.only(right: 20, bottom: 15),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.5),
