@@ -1,91 +1,47 @@
-import '../model/model.dart';
-import '../style/strings.dart';
+import 'dart:ui';
 
+import '../model/model.dart';
 class Global {
-  static List<WildAnimal> wildAnimalSplashData = [
-    WildAnimal(
-      price: Strings.price1,
-      months: Strings.weekSubscription,
-      image: "assets/image/weekly.jpg",
-    ),
-    WildAnimal(
-      price: Strings.price2,
-      months: Strings.oneMonthSubscription,
-      image: "assets/image/monthly.jpg",
-    ),
-    WildAnimal(
-      price: Strings.price3,
-      months: Strings.threeMonthSubscription,
-      image: "assets/image/3monthly.jpg",
-    ),
-    WildAnimal(
-      price: Strings.price4,
-      months: Strings.sixMonthSubscription,
-      image: "assets/image/6monthly.jpg",
-    ),
-  ];
-  static List<WildAnimal> images = [
-    WildAnimal(
-      image: "assets/image/lion.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/Elephant.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/elepent.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/Lion.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/cobras.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/Snake.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/Cat.jpg",
-    ),
-    WildAnimal(
-      image: "assets/image/Panda.jpg",
-    ),
+  static Color color = const Color(0xffC19E82);
+
+  static List<AnimalData> detailsOfData = [
+    AnimalData(time: "Week", price: "1.99"),
+    AnimalData(time: "1 Month", price: "4.39"),
+    AnimalData(time: "3 Month", price: "9.99"),
+    AnimalData(time: "6 Month", price: "13"),
   ];
   static String category = "";
-  static List<WildAnimal> animalData = [
-    WildAnimal(
+  static List<Animal> animalData = [
+    Animal(
+      name: "Python family",
+      description: "Pythonidae",
+      category: "Snake",
+    ),
+    Animal(
+      name: "Cobras",
+      description: "Naja",
+      category: "Snake",
+    ),
+    Animal(
+      name: "German Shepherd",
+      description: "German Shepherd",
+      category: "Dog",
+    ),
+    Animal(
+      name: "Siberian Husky",
+      description: "Husky; Sibe",
+      category: "Dog",
+    ),
+    Animal(
+      name: "African elephant",
+      description: "Loxodonta",
+      category: "Elephant",
+    ),
+    Animal(
       name: "Elephant",
-      description: Strings.loremIpsum,
+      description: "Large Rounded Ears",
       category: "Elephant",
-    ),
-    WildAnimal(
-      name: "elepent",
-      description: Strings.loremIpsum,
-      category: "Elephant",
-    ),
-    WildAnimal(
-      name: "Lion",
-      description: Strings.loremIpsum,
-      category: "Lion",
-    ),
-    WildAnimal(
-      name: "cobras",
-      description: Strings.loremIpsum,
-      category: "Snake",
-    ),
-    WildAnimal(
-      name: "Snake",
-      description: Strings.loremIpsum,
-      category: "Snake",
-    ),
-    WildAnimal(
-      name: "cat",
-      description: Strings.loremIpsum,
-      category: "Pets",
-    ),
-    WildAnimal(
-      name: "panda",
-      description: Strings.loremIpsum,
-      category: "Pets",
     ),
   ];
 }
+
