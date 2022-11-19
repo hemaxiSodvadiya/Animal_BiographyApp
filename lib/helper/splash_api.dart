@@ -1,16 +1,20 @@
+
 import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
 
-class SplashHelper {
-  SplashHelper._();
-  static final SplashHelper splashHelper = SplashHelper._();
+class ImageApi {
+  ImageApi._();
+  static ImageApi imageApi = ImageApi._();
 
-  Future<Uint8List?> splashImage() async {
-    String uri = "https://source.unsplash.com/random/700×900/?wildAnimal";
-    http.Response response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      return response.bodyBytes;
+  Future<Uint8List?> getImage({required String search}) async {
+    http.Response image = await http
+        .get(Uri.parse("https://source.unsplash.com/random/?$search"));
+
+    if (image.statusCode == 200) {
+      return image.bodyBytes;
+    } else {
+      null;
     }
-    return null;
   }
 }
