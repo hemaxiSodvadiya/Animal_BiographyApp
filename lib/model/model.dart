@@ -1,65 +1,48 @@
-// class WildAnimal {
-//   String? name;
-//   String? image;
-//   String? description;
-//   String? place;
-//   String? common;
-//   String? height;
-//   String? weight;
-//   String? vol;
-//
-//   WildAnimal({
-//     this.name,
-//     this.image,
-//     this.description,
-//     this.place,
-//     this.common,
-//     this.height,
-//     this.weight,
-//     this.vol,
-//   });
-//
-//   factory WildAnimal.fromMap({required Map jsonData}) {
-//     return WildAnimal(
-//       name: jsonData['name'],
-//       description: jsonData['description'],
-//       place: jsonData['place'],
-//       common: jsonData['common'],
-//       height: jsonData['height'],
-//       weight:
-//     );
-//   }
-// }
 import 'dart:typed_data';
 
-class WildAnimal {
-  String? months;
-  String? price;
-  String? image;
-  String? name;
-  String? description;
-  String? category;
-  Uint8List? images;
+class AnimalData {
+  final String time;
+  final String price;
 
-  WildAnimal({
-    this.months,
-    this.price,
-    this.image,
-    this.name,
-    this.description,
-    this.category,
-    this.images,
-  });
+  AnimalData({required this.time, required this.price});
+}
 
-  factory WildAnimal.fromJson({required Map jsonData}) {
-    return WildAnimal(
-      months: jsonData['months'],
-      price: jsonData['price'],
-      image: jsonData['image'],
-      name: jsonData['name'],
-      description: jsonData['description'],
-      category: jsonData['category'],
-      images: jsonData['images'],
-    );
+class DBData {
+  final String time;
+  final String price;
+  final Uint8List image;
+  DBData({required this.time, required this.price, required this.image});
+  factory DBData.fromData(e) {
+    return DBData(time: e['time'], price: e['price'], image: e['image']);
+  }
+}
+
+class Animal {
+  final String name;
+  final String description;
+  final String category;
+
+  Animal(
+      {required this.name, required this.category, required this.description});
+}
+
+class DBAnimal {
+  final String name;
+  final String description;
+  final String category;
+  final Uint8List image;
+
+  DBAnimal(
+      {required this.name,
+      required this.category,
+      required this.description,
+      required this.image});
+
+  factory DBAnimal.fromData(Map data) {
+    return DBAnimal(
+        name: data["name"],
+        category: data["category"],
+        description: data["description"],
+        image: data['image']);
   }
 }
