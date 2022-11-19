@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 clickOptions(
     {required String name,
@@ -25,7 +24,7 @@ clickOptions(
       const SizedBox(height: 5),
       Text(
         name,
-        style: GoogleFonts.poppins(
+        style: TextStyle(
           color: Colors.white.withOpacity(0.9),
           fontSize: 17,
           fontWeight: FontWeight.w500,
