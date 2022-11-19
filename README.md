@@ -4,16 +4,12 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+<img src="https://user-images.githubusercontent.com/111499619/201458172-2ad9e5fd-e02c-440c-9750-4c10fbc06ff8.jpeg" style=" height:500px; " data-target="animated-image.originalImage">
 
-A few resources to get you started if this is your first Flutter project:
+<img src="https://user-images.githubusercontent.com/111499619/201458245-65d04f9d-d889-45a2-b308-bf4a99c05777.jpeg" style=" height:500px; " data-target="animated-image.originalImage">
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<img src="https://user-images.githubusercontent.com/111499619/201458245-65d04f9d-d889-45a2-b308-bf4a99c05777.jpeg" style=" height:500px; " data-target="animated-image.originalImage">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 ![animal 1](https://user-images.githubusercontent.com/111499619/201458172-2ad9e5fd-e02c-440c-9750-4c10fbc06ff8.jpeg)
 ![animal 2](https://user-images.githubusercontent.com/111499619/201458245-65d04f9d-d889-45a2-b308-bf4a99c05777.jpeg)
 ![animal 3](https://user-images.githubusercontent.com/111499619/201458262-a6ce390b-1273-4b28-a8e4-3644fc25584b.jpeg)
