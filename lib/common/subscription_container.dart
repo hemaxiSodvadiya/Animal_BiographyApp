@@ -38,6 +38,7 @@ class SubscriptionContainer extends StatelessWidget {
               ),
             ),
           ),
+          /**/
           Positioned(
             top: 0,
             bottom: 0,
