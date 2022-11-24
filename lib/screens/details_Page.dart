@@ -12,7 +12,8 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
-    DBAnimal args = ModalRoute.of(context)!.settings.arguments as DBAnimal;
+    DBCategoryAnimalData args =
+        ModalRoute.of(context)!.settings.arguments as DBCategoryAnimalData;
     return Scaffold(
       appBar: AppBar(
         title: Text("Animal Detail"),
