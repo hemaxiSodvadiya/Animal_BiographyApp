@@ -24,13 +24,12 @@ class ChoosePlanScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomAppBar(),
-                SizedBox(height: 20),
-                Text(
-                  "Choose a plan",
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.white.withOpacity(0.8),
-                    fontWeight: FontWeight.w600,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Text(
+                    Strings.chooseAPlan,
+                    style: TextStyles.headingTextStyle,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -38,104 +37,107 @@ class ChoosePlanScreen extends StatelessWidget {
                     child: FutureBuilder(
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<DBData>? res = snapshot.data;
+                      List<DBChooseAnimalData>? res = snapshot.data;
                       return ListView.builder(
-                        itemBuilder: (context, i) {
-                          return Container(
-                            margin: EdgeInsets.all(10),
-                            height: 120,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(7),
-                              image: DecorationImage(
-                                image: MemoryImage(res[i].image),
-                                fit: BoxFit.cover,
-                                colorFilter: const ColorFilter.mode(
-                                    Color(0xffC19E82), BlendMode.modulate),
+                          shrinkWrap: true,
+                          itemCount: res!.length,
+                          itemBuilder: (context, i) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 15),
-                                Text(
-                                  "${res[i].time}\nSubscription",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white.withOpacity(0.8),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const Spacer(),
-                                SizedBox(
-                                  width: width / 3,
-                                  child: Text(
-                                    "\$ ${res[i].price}",
-                                    style: TextStyle(
-                                      fontSize: 33,
-                                      color: Colors.white.withOpacity(0.8),
-                                      fontWeight: FontWeight.w700,
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: ColorFiltered(
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.black.withOpacity(0.5),
+                                        BlendMode.srcATop,
+                                      ),
+                                      child: Image.memory(
+                                        res[i].image,
+                                        height: height * 0.6 / 4,
+                                        width: width,
+                                        fit: BoxFit.fitWidth,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        itemCount: res!.length,
-                      );
+                                  Positioned(
+                                    top: 0,
+                                    bottom: 0,
+                                    left: 48,
+                                    right: 48,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          "${res[i].time}\nSubscription",
+                                          style:
+                                              TextStyles.subscriptionTextStyle,
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "\$ ${res[i].price}",
+                                          style: TextStyles
+                                              .subscriptionAmountTextStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
                     } else if (snapshot.hasError) {
                       return Center(child: Text("${snapshot.error}"));
                     } else {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.brown),
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: Colors.brown.shade200),
                       );
                     }
                   },
                   future: DBHelper.dbHelper.fetchAllRecord(
                       tableName: "splash", data: Global.detailsOfData),
                 )),
-                SizedBox(height: 20),
-                Text(
-                  "Last Step to enjoy",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white.withOpacity(0.8),
-                    fontWeight: FontWeight.w600,
-                  ),
+                Positioned(
+                  bottom: 48,
+                  left: 20,
+                  child: Text(Strings.LAST_STEP_TO_ENJOY,
+                      style: TextStyles.buttonTextStyle),
                 ),
                 const SizedBox(height: 15),
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
+          Positioned(
+            bottom: -30,
+            right: -30,
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed("home_page");
+                Navigator.of(context).pushReplacementNamed('home_page');
               },
-              child: NextPage(),
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFe9d1b5),
+                ),
+                child: Align(
+                  alignment: Alignment(-0.4, -0.4),
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              ),
             ),
-          )
+          ),
         ],
-      ),
-    );
-  }
-
-  NextPage() {
-    return Container(
-      alignment: Alignment.bottomRight,
-      height: 70,
-      width: 80,
-      padding: const EdgeInsets.only(right: 20, bottom: 15),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(100),
-        ),
-      ),
-      child: const Icon(
-        Icons.arrow_forward,
-        size: 30,
-        color: Colors.white,
       ),
     );
   }
