@@ -6,6 +6,9 @@ import '../common/custom_app_bar.dart';
 import '../global/global_data.dart';
 import '../helper/db_helpers.dart';
 import '../model/model.dart';
+import '../style/strings.dart';
+import '../style/text_styles.dart';
+import 'choose_plan_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future<List<DBData>> details = DBHelper.dbHelper
+    Future<List<DBChooseAnimalData>> details = DBHelper.dbHelper
         .fetchAllRecord(tableName: "Splash", data: Global.detailsOfData);
   }
 
@@ -29,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
- 
+
     return Scaffold(
       backgroundColor: Colors.brown.shade100,
       body: SafeArea(
@@ -45,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   if (snapshot.hasData) {
                     List? res = snapshot.data as List?;
                     int? randomIndex = random.nextInt(res!.length);
-                    DBData randomImage = res[randomIndex];
+                    DBChooseAnimalData randomImage = res[randomIndex];
 
                     return Container(
                       width: width,
@@ -64,16 +67,16 @@ class _SplashScreenState extends State<SplashScreen> {
                       child: Text("${snapshot.error}"),
                     );
                   } else {
-                    return const Center(
+                    return Center(
                       child: CircularProgressIndicator(
-                        color: Colors.brown,
+                        color: Colors.brown.shade200,
                       ),
                     );
                   }
                 },
               ),
               Column(
-                children: [
+                children: <Widget>[
                   CustomAppBar(),
                   Spacer(),
                   Padding(
@@ -86,31 +89,19 @@ class _SplashScreenState extends State<SplashScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: "Ready to watch?",
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                            ),
+                            text: Strings.READY_TO_WATCH,
+                            style: TextStyles.bigHeadingTextStyle,
                           ),
                           TextSpan(text: "\n"),
                           TextSpan(
-                              text:
-                                  "A planet is a global leader in real life entertainment, serving a passionate audience of superfans around the world with content that inspires, informs and entertains.",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              )),
+                            text: Strings.READY_TO_WATCH_DESC,
+                            style: TextStyles.bodyTextStyle,
+                          ),
                           TextSpan(text: "\n"),
                           TextSpan(text: "\n"),
                           TextSpan(
-                            text: "Start Enjoying",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                            ),
+                            text: Strings.START_ENJOYING,
+                            style: TextStyles.buttonTextStyle,
                           ),
                         ],
                       ),
@@ -118,17 +109,35 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ],
               ),
-              Align(
-                alignment: Alignment.bottomRight,
+              Positioned(
+                bottom: -30,
+                right: -30,
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      Navigator.of(context).pushNamed('choose_Page');
-                    });
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ChoosePlanScreen(),
+                      ),
+                    );
                   },
-                  child: NextPage(),
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFDAD4CC).withOpacity(0.8),
+                    ),
+                    child: Align(
+                      alignment: Alignment(-0.4, -0.4),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ],
@@ -136,23 +145,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  NextPage() {
-    return Container(
-      alignment: Alignment.bottomRight,
-      height: 75,
-      width: 85,
-      padding: const EdgeInsets.only(right: 20, bottom: 15),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(100),
-        ),
-      ),
-      child: const Icon(
-        Icons.arrow_forward,
-        size: 30,
-        color: Colors.white,
-      ),
-    );
-  }
-}
