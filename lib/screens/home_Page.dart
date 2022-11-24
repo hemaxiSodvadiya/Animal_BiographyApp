@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,8 @@ import '../global/global_data.dart';
 import '../helper/db_helpers.dart';
 import '../helper/splash_api.dart';
 import '../model/model.dart';
+import '../style/strings.dart';
+import '../style/text_styles.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Color backGroundColor = const Color(0xffC19E82);
+  int index = 0;
+  Random random = Random();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Container(
-            color: backGroundColor,
+            color: const Color(0xffC19E82),
             height: height * 0.35,
             child: Stack(
               children: [
@@ -40,14 +44,14 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         image!,
                         fit: BoxFit.cover,
-                        color: backGroundColor.withOpacity(0.8),
+                        color: const Color(0xffC19E82).withOpacity(0.8),
                         colorBlendMode: BlendMode.modulate,
                       );
                     } else if (snapshot.hasError) {
                       return Center(child: Text("${snapshot.error}"));
                     } else {
-                      return Center(
-                        child: const CircularProgressIndicator(
+                      return const Center(
+                        child: CircularProgressIndicator(
                           color: Colors.brown,
                         ),
                       );
@@ -55,6 +59,36 @@ class _HomePageState extends State<HomePage> {
                   },
                   future: ImageApi.imageApi.getImage(search: 'Wild Animal'),
                 ),
+                // FutureBuilder(
+                //   future: DBHelper.dbHelper.fetchAllRecord(
+                //       tableName: "ManEater", data: Global.detailsOfData),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       List? res = snapshot.data as List?;
+                //       int? randomIndex = random.nextInt(res!.length);
+                //       DBData randomImage = res[randomIndex];
+                //
+                //       return Image.memory(
+                //         height: height * 0.35,
+                //         width: double.infinity,
+                //         randomImage.image,
+                //         fit: BoxFit.cover,
+                //         color: backGroundColor.withOpacity(0.8),
+                //         colorBlendMode: BlendMode.modulate,
+                //       );
+                //     } else if (snapshot.hasError) {
+                //       return Center(
+                //         child: Text("${snapshot.error}"),
+                //       );
+                //     } else {
+                //       return Center(
+                //         child: CircularProgressIndicator(
+                //           color: Colors.brown.shade200,
+                //         ),
+                //       );
+                //     }
+                //   },
+                // ),
                 CustomAppBar(),
                 Container(
                   height: height * 0.38,
@@ -62,13 +96,11 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       const Spacer(),
-                      Text(
-                        "Welcome to\nNew Aplanet",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 43,
-                          color: Colors.white.withOpacity(0.86),
-                          fontWeight: FontWeight.w900,
+                      Center(
+                        child: Text(
+                          Strings.welcomeToAPlanet,
+                          style: TextStyles.bigHeadingTextStyle,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       const Spacer(),
@@ -86,9 +118,9 @@ class _HomePageState extends State<HomePage> {
               height: height * 0.65,
               width: double.infinity,
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: backGroundColor,
-                borderRadius: const BorderRadius.only(
+              decoration: const BoxDecoration(
+                color: Color(0xffC19E82),
+                borderRadius: BorderRadius.only(
                   topRight: Radius.circular(30),
                   topLeft: Radius.circular(30),
                 ),
@@ -100,7 +132,8 @@ class _HomePageState extends State<HomePage> {
                   FutureBuilder(
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        List<DBAnimal> data = snapshot.data!;
+                        print("+++");
+                        List<DBCategoryAnimalData> res = snapshot.data!;
                         return SizedBox(
                           height: height * 0.38,
                           child: ListView.builder(
@@ -115,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () {
                                     Navigator.of(context).pushNamed(
                                         'detail_Page',
-                                        arguments: data[i]);
+                                        arguments: res[i]);
                                   },
                                   child: Column(
                                     crossAxisAlignment:
@@ -136,12 +169,12 @@ class _HomePageState extends State<HomePage> {
                                             ],
                                             image: DecorationImage(
                                                 fit: BoxFit.cover,
-                                                image: MemoryImage(
-                                                    data[i].image))),
+                                                image:
+                                                    MemoryImage(res[i].image))),
                                       ),
                                       const SizedBox(height: 3),
                                       Text(
-                                        data[i].name,
+                                        res[i].name,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,
@@ -149,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       Text(
-                                        data[i].description,
+                                        res[i].description,
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.8),
                                           fontWeight: FontWeight.w500,
@@ -161,46 +194,31 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                             scrollDirection: Axis.horizontal,
-                            itemCount: data.length,
+                            itemCount: res.length,
                           ),
                         );
                       } else if (snapshot.hasError) {
                         return Center(child: Text("${snapshot.error}"));
                       } else {
-                        return const Center(
+                        return Center(
                           child: CircularProgressIndicator(
-                            color: Colors.brown,
+                            color: Colors.brown.shade200,
                           ),
                         );
                       }
                     },
                     future: DBHelper.dbHelper.fetchAllAnimalData(
-                        tableName: "animalsData", data: Global.animalData),
+                        tableName: "animalsData", data: Global.categoryData),
                   ),
                   const Spacer(),
                   Text(
-                    "Quick Categories",
-                    style: TextStyle(
-                      fontSize: 23,
-                      color: Colors.white.withOpacity(0.9),
-                      fontWeight: FontWeight.w600,
-                    ),
+                    Strings.quickCategories,
+                    style: TextStyles.titleTextStyle,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Global.category = "Snake";
-                          setState(() {});
-                        },
-                        child: clickOptions(
-                            width: width,
-                            height: height,
-                            name: "Snake",
-                            image: "snake"),
-                      ),
                       GestureDetector(
                         onTap: () {
                           Global.category = "Dog";
@@ -214,6 +232,17 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          Global.category = "Snake";
+                          setState(() {});
+                        },
+                        child: clickOptions(
+                            width: width,
+                            height: height,
+                            name: "Snake",
+                            image: "snake"),
+                      ),
+                      GestureDetector(
+                        onTap: () {
                           Global.category = "Elephant";
                           setState(() {});
                         },
@@ -222,17 +251,6 @@ class _HomePageState extends State<HomePage> {
                             height: height,
                             name: "Elephant",
                             image: "elephant"),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Global.category = "Lion";
-                          setState(() {});
-                        },
-                        child: clickOptions(
-                            width: width,
-                            height: height,
-                            name: "Lion",
-                            image: "lion"),
                       ),
                     ],
                   ),
