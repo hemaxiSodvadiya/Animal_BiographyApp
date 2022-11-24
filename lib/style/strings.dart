@@ -29,3 +29,4 @@ class Strings {
   static const String price3 = "9.99";
   static const String price4 = "13";
 }
+/**/
