@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
@@ -9,7 +8,7 @@ class ImageApi {
 
   Future<Uint8List?> getImage({required String search}) async {
     http.Response image = await http
-        .get(Uri.parse("https://source.unsplash.com/random/?$search"));
+        .get(Uri.parse("https://source.unsplash.com/random/?wildanimal"));
 
     if (image.statusCode == 200) {
       return image.bodyBytes;
